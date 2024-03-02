@@ -10,11 +10,18 @@ import (
 	"os"
 )
 
-var palette = []color.Color{color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xFF}, color.RGBA{R: 0x00, G: 0xFF, B: 0xFF, A: 0xFF}}
+var palette = []color.Color{
+	color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xFF}, // Black
+	color.RGBA{R: 0xFF, G: 0x00, B: 0x00, A: 0xFF}, // Red
+	color.RGBA{R: 0x00, G: 0xFF, B: 0x00, A: 0xFF}, // Green
+	color.RGBA{R: 0x00, G: 0x00, B: 0xFF, A: 0xFF}, // Blue
+}
 
 const (
 	blackIndex = 0
-	cyanIndex  = 1
+	redIndex   = 1
+	greenIndex = 2
+	blueIndex  = 3
 )
 
 func main() {
@@ -23,10 +30,10 @@ func main() {
 
 func lissajous(out io.Writer) {
 	const (
-		cycles  = 6
+		cycles  = 4
 		res     = 0.001
-		size    = 200
-		nframes = 63
+		size    = 100
+		nframes = 64
 		delay   = 8
 	)
 	freq := rand.Float64() * 3.0
@@ -38,8 +45,9 @@ func lissajous(out io.Writer) {
 		for t := 0.0; t < cycles*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
+			// Alternate between different colors based on the position of x and y
 			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
-				cyanIndex)
+				uint8(i%len(palette))+1)
 		}
 		phase += 0.1
 		anim.Delay = append(anim.Delay, delay)
