@@ -10,24 +10,12 @@ import (
 	"os"
 )
 
-var palette = []color.Color{
-	color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xFF}, // Black
-	color.RGBA{R: 0x24, G: 0x6A, B: 0x73, A: 0xFF}, // #246A73
-	color.RGBA{R: 0x36, G: 0x8F, B: 0x8B, A: 0xFF}, // #368F8B
-	color.RGBA{R: 0xF3, G: 0xDF, B: 0xC1, A: 0xFF}, // #F3DFC1
-}
+var palette = []color.Color{color.Black, color.RGBA{R: 0xFF, G: 0x68, B: 0x6B, A: 0xFF}, color.RGBA{R: 0xA5, G: 0xFF, B: 0xD6, A: 0xFF}}
 
 const (
 	blackIndex = 0
-	blueIndex  = 1
+	redIndex   = 1
 	greenIndex = 2
-	beigeIndex = 3
-
-	cycles  = 6
-	res     = 0.001
-	size    = 300
-	nframes = 130
-	delay   = 30
 )
 
 func main() {
@@ -35,6 +23,13 @@ func main() {
 }
 
 func lissajous(out io.Writer) {
+	const (
+		cycles  = 5
+		res     = 0.001
+		size    = 100
+		nframes = 64
+		delay   = 8
+	)
 	freq := rand.Float64() * 3.0
 	anim := gif.GIF{LoopCount: nframes}
 	phase := 0.0
@@ -50,15 +45,9 @@ func lissajous(out io.Writer) {
 		for t := 0.0; t < cycles*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
-			// Alternating between different colors based on the frame number
-			switch i % 3 {
-			case 0:
-				img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), blueIndex+1)
-			case 1:
-				img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), greenIndex+1)
-			case 2:
-				img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), beigeIndex+1)
-			}
+			// Draw red and green lines using the specified colors
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), redIndex)
+			img.SetColorIndex(size+int(y*size+0.5), size+int(x*size+0.5), greenIndex)
 		}
 		phase += 0.1
 		anim.Delay = append(anim.Delay, delay)
