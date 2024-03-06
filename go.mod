@@ -1,3 +1,3 @@
-module main.go
+module lissajousProject
 
 go 1.18
