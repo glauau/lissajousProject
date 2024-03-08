@@ -1,3 +1,3 @@
-module lissajous.go
+module lissajousProject/lissajous
 
 go 1.18

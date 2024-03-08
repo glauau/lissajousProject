@@ -1,13 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/gif"
 	"io"
 	"math"
 	"math/rand"
-	"os"
+	"net/http"
+	"strconv"
 )
 
 var palette = []color.Color{color.Black,
@@ -21,13 +23,22 @@ const (
 	greenIndex = 2
 )
 
-func main() {
-	lissajous(os.Stdout)
+func OutGif() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		cycles := 5 // Valor padrão
+		if cyclesStr := r.FormValue("cycles"); cyclesStr != "" {
+			if c, err := strconv.Atoi(cyclesStr); err == nil {
+				cycles = c
+			}
+		}
+		lissajous(w, cycles)
+	})
+	fmt.Println("Servindo em http://localhost:8080")
+	http.ListenAndServe(":8080", nil)
 }
 
-func lissajous(out io.Writer) {
+func lissajous(out io.Writer, cycles int) {
 	const (
-		cycles  = 5
 		res     = 0.001
 		size    = 100
 		nframes = 64
@@ -45,7 +56,7 @@ func lissajous(out io.Writer) {
 				img.SetColorIndex(x, y, blackIndex)
 			}
 		}
-		for t := 0.0; t < cycles*2*math.Pi; t += res {
+		for t := 0.0; t < float64(cycles)*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
 			// Draw red and green lines using the specified colors
@@ -57,4 +68,8 @@ func lissajous(out io.Writer) {
 		anim.Image = append(anim.Image, img)
 	}
 	gif.EncodeAll(out, &anim)
+}
+
+func main() {
+	OutGif()
 }
