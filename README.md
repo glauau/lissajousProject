@@ -1,5 +1,5 @@
 # LissajousCurves
-<img src="out.gif" alt="example">
+<img src="lissajous/out.gif" alt="example">
 
 Generates & serves dynamic Lissajous curve GIF via web app. Control cycles with URL http://localhost:8080/?cycles=10.
 
