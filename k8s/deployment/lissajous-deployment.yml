@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: lissajous-deployment
+  labels:
+      app: lissajous
+spec:
+  replicas: 3
+  selector:
+      matchLabels:
+        app: lissajous
+  template:
+    metadata:
+      labels:
+        app: lissajous
+    spec:
+      containers:
+        - name: k8s-lissajous
+          image: lissajous-golang:latest
+          ports:
+          - name: http-port
+            containerPort: 8080
