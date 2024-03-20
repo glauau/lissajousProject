@@ -33,6 +33,12 @@ func OutGif() {
 		}
 		lissajous(w, cycles)
 	})
+
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintln(w, "OK")
+	})
+
 	fmt.Println("Servindo em http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 }
