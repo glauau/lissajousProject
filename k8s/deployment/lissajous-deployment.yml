@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: lissajous-deployment
-  labels:
-    app: lissajous
 spec:
   replicas: 1  # Defina o número de réplicas conforme necessário
   selector:
