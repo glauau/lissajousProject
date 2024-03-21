@@ -14,6 +14,26 @@ build_image(){
 	echo -e "image successfully built."
 }
 
+#function to push image
+push_image() {
+    if [[ -z "$DOCKER_USERNAME" ]]; then
+        echo "please, export the variable DOCKER_USERNAME"
+        exit 1
+    fi
+    docker tag "$IMAGE_NAME:$IMAGE_VERSION" "$DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_VERSION"
+    docker push "$DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_VERSION"
+}
+
+
+#function to run image
+run_image() {
+    if [[ -z "$HOST_PORT" || -z "$CONTAINER_PORT" ]]; then
+        echo "please, export the variables HOST_PORT and CONTAINER_PORT to run the image."
+        exit 1
+    fi
+    docker run -p "$HOST_PORT:$CONTAINER_PORT" "$IMAGE_NAME:$IMAGE_VERSION"
+}
+
 #function to show options
 show_options() {
 echo -e "
