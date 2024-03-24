@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: lissajous-container
-        image: glaut0n/lissajous-golang:1.2
+        image: glaut0n/lissajous-golang:1.3
         ports:
         - name: http-port
           containerPort: 8080
