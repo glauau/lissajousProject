@@ -2,8 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: lissajous-deployment
+  labels:
+    app: lissajous
 spec:
-  replicas: 1  # Defina o número de réplicas conforme necessário
+  replicas: 1
   selector:
     matchLabels:
       app: lissajous
@@ -13,8 +15,20 @@ spec:
         app: lissajous
     spec:
       containers:
-      - name: k8s-lissajous
-        image: glaut0n/lissajous-golang:1.1
+      - name: lissajous-container
+        image: glaut0n/lissajous-golang:1.2
         ports:
         - name: http-port
-          containerPort: 8080  # Porta em que o contêiner escuta
+          containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http-port
+          initialDelaySeconds: 15
+          timeoutSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http-port
+          initialDelaySeconds: 15
+          timeoutSeconds: 30

@@ -37,6 +37,16 @@ run_image() {
 #function to show options
 show_options() {
 echo -e "
+# before you execute any of these options, 
+# please export the variables:
+#
+# IMAGE_NAME
+# IMAGE_VERSION
+# DOCKER_USERNAME
+# HOST_PORT
+# CONTAINER_PORT
+__________________________________
+
 Options:
 1 - Build image
 2 - Push image
